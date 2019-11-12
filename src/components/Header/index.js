@@ -1,13 +1,14 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import logo from '~/assets/logo.svg';
 
 import { signOut } from '~/store/modules/auth/auth.actions';
 
-import { Container, Content, StyledNavLink } from './styles';
+import { Container, StyledNavLink, Divider } from './styles';
 
 export default function Header() {
   const dispatch = useDispatch();
+  const { profile } = useSelector(state => state.user);
 
   function handleOnCLick() {
     dispatch(signOut());
@@ -15,34 +16,35 @@ export default function Header() {
 
   return (
     <Container>
-      <Content>
-        <nav>
-          <img src={logo} alt="GymPoint" />
-          <span>GYMPOINT</span>
+      <nav>
+        <img src={logo} alt="GymPoint" />
+        <span>GYMPOINT</span>
 
-          <div className="divider" />
+        <Divider />
 
-          <StyledNavLink exact to="/students" activeClassName="active">
-            STUDENTS
-          </StyledNavLink>
-          <StyledNavLink to="/plans" activeClassName="active">
-            PLANS
-          </StyledNavLink>
-          <StyledNavLink to="/enrollments" activeClassName="active">
-            ENROLLMENTS
-          </StyledNavLink>
-          <StyledNavLink to="/messages" activeClassName="active">
-            MESSAGES
-          </StyledNavLink>
-        </nav>
+        <StyledNavLink exact to="/students" activeClassName="active">
+          STUDENTS
+        </StyledNavLink>
+        <StyledNavLink to="/plans" activeClassName="active">
+          PLANS
+        </StyledNavLink>
+        <StyledNavLink to="/enrollments" activeClassName="active">
+          ENROLLMENTS
+        </StyledNavLink>
+        <StyledNavLink to="/messages" activeClassName="active">
+          MESSAGES
+        </StyledNavLink>
+      </nav>
+      <div>
+        <Divider />
 
         <aside>
-          <strong>Diego</strong>
+          <strong>{profile.name}</strong>
           <button type="button" onClick={handleOnCLick}>
             Sign Out
           </button>
         </aside>
-      </Content>
+      </div>
     </Container>
   );
 }

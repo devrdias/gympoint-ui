@@ -1,6 +1,7 @@
 import { createGlobalStyle, css } from 'styled-components';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default createGlobalStyle`${css`
   @import url('https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap');
@@ -29,7 +30,7 @@ export default createGlobalStyle`${css`
   }
 
   body {
-    /* background: #ee4d64; */
+    background: linear-gradient(-90deg, #ee4d64, #ee415a);
     -webkit-font-smoothing: antialiased !important;
   }
 
@@ -43,6 +44,9 @@ export default createGlobalStyle`${css`
 
   button {
     cursor: pointer;
+  }
+  button:focus {
+    outline: 0 !important;
   }
 
   a {
