@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { MdEdit, MdDelete } from 'react-icons/md';
 import AlertModal from '../../components/AlertModal';
 import CustomModal from '../../components/CustomModal';
-import NewStudentForm from '~/components/NewStudentForm';
+import StudentForm from '~/components/StudentForm';
 
 import {
   fetchStudentsRequest,
@@ -17,16 +17,31 @@ export default function Students() {
   const dispatch = useDispatch();
   const students = getStudentsById(useSelector(state => state.student));
   const [search, setSearch] = useState('');
+  const [formAction, setFormaAction] = useState(null);
+  const [initialFormData, setInitialFormData] = useState({});
   const [deleteId, setDeleteId] = useState();
   const [showDeleteStudentModal, setShowDeleteStudentModal] = useState(false);
-  const [showNewStudentModal, setShowNewStudentModal] = useState(true);
+  const [showStudentModal, setShowStudentModal] = useState(false);
 
   useEffect(() => {
     dispatch(fetchStudentsRequest());
   }, [dispatch]);
 
-  function handleOnClick() {
-    setShowNewStudentModal(true);
+  function handleAddNewStudent() {
+    setFormaAction('new');
+    setShowStudentModal(true);
+  }
+
+  function handleEditStudent(student) {
+    setFormaAction('edit');
+    setInitialFormData({
+      name: student.name,
+      email: student.email,
+      birth: student.birth,
+      weight: student.weight,
+      height: student.height,
+    });
+    setShowStudentModal(true);
   }
 
   function handleOnChange(e) {
@@ -43,8 +58,6 @@ export default function Students() {
     setDeleteId(id);
   }
 
-  function handleEdit(id) {}
-
   function handleDelete(id) {
     dispatch(deleteStudentRequest(id));
     setDeleteId(null);
@@ -54,9 +67,9 @@ export default function Students() {
   return (
     <Container>
       <header>
-        <h1>Students List</h1>
+        <h1>Students</h1>
         <div>
-          <button type="button" onClick={handleOnClick}>
+          <button type="button" onClick={handleAddNewStudent}>
             NEW
           </button>
           <form onSubmit={handleSubmit}>
@@ -90,7 +103,7 @@ export default function Students() {
                   <button
                     type="button"
                     id="edit"
-                    onClick={() => handleEdit(student.id)}
+                    onClick={() => handleEditStudent(student)}
                   >
                     <MdEdit size={19} color="#4d85ee" />
                   </button>
@@ -118,13 +131,14 @@ export default function Students() {
 
       <CustomModal
         size="lg"
-        title="Create new student"
+        title={formAction === 'new' ? 'Create new student' : 'Edit student '}
         showFooter={false}
-        handleCloseModal={() => setShowNewStudentModal(false)}
-        showModal={showNewStudentModal}
+        handleCloseModal={() => setShowStudentModal(false)}
+        showModal={showStudentModal}
       >
-        <NewStudentForm
-          handleCloseModal={() => setShowNewStudentModal(false)}
+        <StudentForm
+          initialFormData={formAction === 'edit' && initialFormData}
+          handleCloseModal={() => setShowStudentModal(false)}
         />
       </CustomModal>
     </Container>

@@ -18,9 +18,9 @@ const schema = Yup.object().shape({
   height: Yup.string().required('Height is required'),
 });
 
-export default function NewStudentForm({ handleCloseModal }) {
+export default function StudentForm({ handleCloseModal, initialFormData }) {
   const dispatch = useDispatch();
-  const [fields, setFields] = useState({});
+  const [fields, setFields] = useState({ ...initialFormData });
   const [isValid, setIsValid] = useState(false);
 
   const ref = useRef(null);
@@ -31,7 +31,7 @@ export default function NewStudentForm({ handleCloseModal }) {
       setIsValid(await schema.isValid(fields));
     }
     checkDirtyForm();
-  }, [fields]);
+  }, [fields, isValid]);
 
   useEffect(() => {
     registerField({
@@ -63,7 +63,11 @@ export default function NewStudentForm({ handleCloseModal }) {
 
   return (
     <Container>
-      <Form schema={schema} onSubmit={handleSubmit}>
+      <Form
+        schema={schema}
+        onSubmit={handleSubmit}
+        initialData={initialFormData}
+      >
         <label htmlFor="name">Name</label>
         <Input name="name" placeholder="Name" onChange={handleOnChange} />
         <label htmlFor="email">Email</label>
@@ -115,6 +119,7 @@ export default function NewStudentForm({ handleCloseModal }) {
   );
 }
 
-NewStudentForm.propTypes = {
+StudentForm.propTypes = {
   handleCloseModal: PropTypes.func.isRequired,
+  initialFormData: PropTypes.object.isRequired,
 };
